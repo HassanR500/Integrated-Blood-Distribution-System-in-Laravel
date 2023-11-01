@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function blood_requests()
     {
-        return $this->hasMany(Bloodrequests::class, 'lab_technician_id'); 
+        return $this->hasMany(Bloodrequests::class, 'lab_technician_id');
     }
     public function blooduse(){
         return $this->hasMany(User::class,'lab_technician_id');
@@ -72,12 +72,15 @@ public function isLabTechnician()
 }
 public function labTechnician()
 {
-    return $this->belongsTo(User::class, 'lab_technician_id'); 
+    return $this->belongsTo(User::class, 'lab_technician_id');
 }
 
 public function doctors()
 {
     return $this->hasMany(Doctors::class, 'doctor_id');
 }
-
+public function facility()
+    {
+        return $this->belongsTo(Facilities::class, 'facility_id');
+    }
 }

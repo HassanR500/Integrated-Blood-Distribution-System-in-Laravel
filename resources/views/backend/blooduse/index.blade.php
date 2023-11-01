@@ -16,13 +16,13 @@
                     <thead>
                         <tr>
                         <th>#</th>
-                            <th>Patient Name</th>
-                            <th>Patient Age</th>
+                            <th>Patient</th>
+                            <th>Age</th>
                             <th>Gender</th>
-                            <th>Patient Blood Group</th>
+                            <th>Group</th>
                             <th>Units (L)</th>
                             <th>Doctor</th>
-                            <th>Place</th>
+                            
                             <th>Date</th> 
                         <!-- <th>Slug</th>   -->
                             <th>Action</th>                  
@@ -39,7 +39,7 @@
                             <td>{{$item->blood_group}}</td>
                             <td>{{$item->amount_used}}</td>
                             <td>{{$item->doctor}}</td>
-                            <td>{{$item->place}}</td>
+                            
                             
                             <td>{{$item->date}}</td>
                             <td>

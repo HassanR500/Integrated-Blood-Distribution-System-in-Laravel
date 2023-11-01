@@ -73,5 +73,7 @@ Route::resource("/chats", ChatController::class);
 
 Route::resource("/doctor", DoctorController::class);
 
+Route::resource("/facilities", FacilityController::class);
+
 
 

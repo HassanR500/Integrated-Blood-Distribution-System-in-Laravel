@@ -18,15 +18,15 @@ class Bloodrequests extends Model
 
     public function labTechnician()
     {
-        return $this->belongsTo(User::class, 'lab_technician_id'); 
+        return $this->belongsTo(User::class, 'lab_technician_id');
     }
-    
+
     public static function boot()
     {
         parent::boot();
 
         static::updated(function ($blood_requests){
-         
+
 
             if($blood_requests->isDirty('status') && $blood_requests->status === 'Accepted'){
                 $requestedAmount = $blood_requests->amount_needed;
@@ -36,12 +36,12 @@ class Bloodrequests extends Model
 
                     if ($requestedAmount <= $stock->available) {
                         $stock->decrement('available', $requestedAmount);
-        
+
                         // Find the lab technician's inventory
                         $labtech_inventory = Labtechinventory::where('lab_technician_id', $blood_requests->lab_technician_id)
                             ->where('blood_group', $blood_requests->blood_type)
                             ->first();
-        
+
                         if ($labtech_inventory) {
                             $labtech_inventory->increment('available', $requestedAmount);
                         } else {
@@ -58,7 +58,7 @@ class Bloodrequests extends Model
                     }
 
                 }
-                
+
             }
         });
     }

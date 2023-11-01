@@ -12,7 +12,7 @@ use App\Models\Stock;
 use DB;
 class DonationController extends Controller
 {
-    
+
 
     public function __construct()
     {
@@ -26,7 +26,7 @@ class DonationController extends Controller
         $pendingCount = Bloodrequests::where('status','Pending')->count();
         session(['pendingCount' => $pendingCount]);
         $blood_donation = Donation::all();
-        
+
         return view('backend.blood_donation.index',compact('blood_donation','pendingCount'));
     }
 
@@ -57,7 +57,7 @@ class DonationController extends Controller
         ]);
 
 
-      
+
         $blood_donation = new Donation();
         $blood_donation->stock_id = $request-> stock_id;
         $blood_donation->donor_name = $request->input('donor_name');
@@ -116,7 +116,7 @@ class DonationController extends Controller
     {
         $deldonor = Donation::find($id);
         $deldonor->delete();
-        
+
         return redirect('blood_donation')->with('message',$deldonor->donor_name.' of blood group '. $deldonor->blood_group. ' is no longer a donor');
     }
 }

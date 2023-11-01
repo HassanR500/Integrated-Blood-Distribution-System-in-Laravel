@@ -15,7 +15,7 @@ class UsermanagementController extends Controller
     {
         $this->middleware('auth');
     }
-        	
+
     public function UserList(Request $request)
     {
         $pendingCount = Bloodrequests::where('status','Pending')->count();
@@ -35,7 +35,7 @@ $all = DB::table('users')->get();
 return view('backend.user.add_user',compact('all','pendingCount'));
 }
 
-    
+
 
     public function UserInsert(Request $request)
     {
@@ -51,12 +51,12 @@ $data = array();
 $data['role'] = $request->role;
 
 $insert = DB::table('users')->insert($data);
-       
-if ($insert) 
+
+if ($insert)
 {
-   
+
                 return Redirect()->route('user.index')->with('success','User created successfully!');
-                 
+
         }
 else
         {
@@ -68,8 +68,8 @@ else
         return Redirect()->route('User.index')->with($notification);
         }
 
-        
-           
+
+
 }
 
       public function UserEdit ($id)
@@ -80,43 +80,44 @@ else
         $edit=DB::table('users')
              ->where('id',$id)
              ->first();
-        return view('backend.user.edit_User', compact('edit','pendingCount'));     
+        return view('backend.user.edit_User', compact('edit','pendingCount'));
     }
 
         public function UserUpdate(Request $request,$id)
     {
-      
-        DB::table('users')->where('id', $id)->first();        
+
+        DB::table('users')->where('id', $id)->first();
         $data = array();
+        $data['name'] = $request->name;
         $data['role'] = $request->role;
         $update = DB::table('users')->where('id', $id)->update($data);
 
-        if ($update) 
+        if ($update)
     {
-            
-            return Redirect()->route('user.index')->with('success','User Updated successfully!');                     
+
+            return Redirect()->route('user.index')->with('success','User Updated successfully!');
     }
         else
     {
-        
-        return Redirect()->route('user.index')->with('error','Something is Wrong!');    
+
+        return Redirect()->route('user.index')->with('error','Something is Wrong!');
     }
-     
+
     }
 
 public function UserDelete ($id)
     {
-    
+
         $delete = DB::table('users')->where('id', $id)->delete();
         if ($delete)
                             {
-                                return Redirect()->route('user.index')->with('success','User Deleted successfully!');                  
+                                return Redirect()->route('user.index')->with('success','User Deleted successfully!');
                             }
              else
                   {
-                    return Redirect()->route('user.index')->with('error','Something is Wrong!');  
+                    return Redirect()->route('user.index')->with('error','Something is Wrong!');
                   }
 
       }
-      
+
 }

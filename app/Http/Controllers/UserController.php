@@ -37,7 +37,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-  
+
     public function create()
     {
         $facilities = Facilities::all();
@@ -59,14 +59,14 @@ class UserController extends Controller
             'role' => 'required',
             'user_image' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ]);
-    
+
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->facility_serve = $request->input('facility_serve');
         $user->password = bcrypt($request->input('password'));
         $user->role = $request->input('role');
-    
+
         // Handle image upload
         // Handle image upload
         if ($request->hasFile('user_image')) {
@@ -76,12 +76,12 @@ class UserController extends Controller
             $user->user_image = 'profile_images/' . $imageName;
         }
 
-    
+
         $user->save();
-    
+
         return redirect('admin')->with(['message' => 'User Added Successfully', 'user' => $user]);
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -94,15 +94,14 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): Response
+    public function edit(string $id)
     {
-       
+
         $pendingCount = Bloodrequests::where('status','Pending')->count();
         session(['pendingCount' => $pendingCount]);
-        $edit=DB::table('users')
-             ->where('id',$id)
-             ->first();
-        return view('backend.user.edit_User', compact('edit','pendingCount','messageCount','message'));  
+        $userEdit = User::find($id);
+        $facilities = Facilities::all();
+        return view('backend.admin.edit', compact('userEdit','pendingCount','facilities'));
     }
 
     /**
@@ -110,21 +109,15 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        DB::table('users')->where('id', $id)->first();        
-        $data = array();
-        $data['role'] = $request->role;
-        $update = DB::table('users')->where('id', $id)->update($data);
+        $request->validate([
+            'name' => 'required',
+            'facility_serve' => 'required',
+            'role' => 'required',
+        ]);
+        $userEdit = User::findOrFail($id);
+        $userEdit->update($request->all());
 
-        if ($update) 
-    {
-            
-            return Redirect()->route('user.index')->with('success','User Updated successfully!');                     
-    }
-        else
-    {
-        
-        return Redirect()->route('user.index')->with('error','Something is Wrong!');    
-    }
+        return redirect('admin')->with('message', 'User Updated Successfully');
     }
 
     /**
@@ -135,11 +128,11 @@ class UserController extends Controller
         $delete = DB::table('users')->where('id', $id)->delete();
         if ($delete)
                             {
-                                return Redirect()->route('user.index')->with('success','User Deleted successfully!');                  
+                                return Redirect()->route('user.index')->with('success','User Deleted successfully!');
                             }
              else
                   {
-                    return Redirect()->route('user.index')->with('error','Something is Wrong!');  
+                    return Redirect()->route('user.index')->with('error','Something is Wrong!');
                   }
     }
 }

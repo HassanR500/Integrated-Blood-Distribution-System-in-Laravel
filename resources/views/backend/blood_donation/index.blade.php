@@ -18,11 +18,11 @@
                     <thead>
                         <tr>
                         <th>#</th>
-                            <th>Donor Name</th>
-                            <th>Donor Address</th>
-                            <th>Donor Age</th>
-                            <th>Blood Group</th>
-                            <th>Amount Donated</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Age</th>
+                            <th>Group</th>
+                            <th>Amount</th>
                             <th>Date</th> 
                         <!-- <th>Slug</th>   -->
                         <th>Action</th>                  

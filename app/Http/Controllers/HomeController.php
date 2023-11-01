@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewRequestNotification;
 use App\Models\Labtechinventory;
 use App\Models\Blooduse;
+use App\Models\Facilities;
 use App\Models\Doctors;
 use DB;
 use Carbon\Carbon;
@@ -40,6 +41,7 @@ class HomeController extends Controller
         $userCountManager = User::where('role', 'Blood Bank Manager')->count();
         $userCountLabtech = User::where('role', 'LabTechnician')->count();
         $userCountDoctor = User::where('role', 'Doctor')->count();
+        $facility_need = Facilities::all();
         $user = Auth::user();
         $pendingCount = Bloodrequests::where('status','Pending')->count();
         session(['pendingCount' => $pendingCount]);
@@ -117,7 +119,7 @@ class HomeController extends Controller
 
         $bloodInstCount = Doctors::where('doctor_id', $doctorID)->get();
         
-        return view('home', compact('blood_donation','blood_donationgraph','blood_requests','blood_requestscounted','blood_requestscounted_facility','stocks','stockcounted','isNewRequestReceived','labtech_inventory','blooduse','lab_inventory','bloodused','labtech_inventory_facility','labtech_blooduse_facility','pendingCount','doctor_instruction','bloodInstCount','userCount','userCountManager','userCountLabtech','userCountDoctor'));
+        return view('home', compact('blood_donation','blood_donationgraph','blood_requests','blood_requestscounted','blood_requestscounted_facility','stocks','stockcounted','isNewRequestReceived','labtech_inventory','blooduse','lab_inventory','bloodused','labtech_inventory_facility','labtech_blooduse_facility','pendingCount','doctor_instruction','bloodInstCount','facility_need','userCountManager','userCountLabtech','userCountDoctor'));
     }
   
 }

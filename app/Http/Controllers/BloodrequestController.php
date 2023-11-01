@@ -24,32 +24,37 @@ class BloodrequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
+
      public function index()
 {
+
     $user = Auth::user();
     $pendingCount = Bloodrequests::where('status', 'Pending')->count();
     session(['pendingCount' => $pendingCount]);
 
+
     // Check if the user is an admin or blood bank manager
     if ($user->isAdmin() || $user->isBloodBankManager()) {
-        $blood_requests = Bloodrequests::all();
+        $blood_requests = Bloodrequests::orderBy('created_at', 'desc')->get();
+
         $stocks = Stock::all();
 
         return view('backend.blood_requests.index', compact('blood_requests', 'stocks', 'pendingCount'));
     }
 
+
     // For lab technicians, retrieve their specific blood requests and count
     $labTechnician = $user; // Assign the logged-in user directly to the lab technician variable
-    $blood_requests = $labTechnician->blood_requests;
+    $blood_requests = $labTechnician->blood_requests()->orderBy('created_at', 'desc')->get();
+
     $bloodRequestCount = $labTechnician->blood_requests()->count(); // Get the count of blood requests for the lab technician
     $stocks = Stock::all();
-   
+
 
     return view('backend.blood_requests.index', compact('blood_requests', 'stocks', 'pendingCount', 'bloodRequestCount'));
 }
 
-     
+
 
     /**
      * Show the form for creating a new resource.
@@ -75,7 +80,7 @@ class BloodrequestController extends Controller
             'amount_needed' => 'required|integer',
             'time_interval' => 'required',
             'technician_name' => 'required',
-            
+
         ]);
         $validatedData['lab_technician_id'] = $request->input('lab_technician_id');
         $requestData = Bloodrequests::create($validatedData);
@@ -92,7 +97,7 @@ class BloodrequestController extends Controller
         $requestData->save();
 
         $bloodbankmanager = User::where('role','Blood Bank Manager')->get();
-        
+
         return redirect('blood_requests')->with('message','Your request has been sent Successfully');
     }
 
@@ -111,7 +116,7 @@ class BloodrequestController extends Controller
     public function edit(string $id)
     {
         $stocks = Stock::all();
-        
+
         $blood_requests = Bloodrequests::find($id);
         return view('backend.blood_requests.edit',compact('blood_requests','stocks'));
     }
@@ -126,9 +131,9 @@ class BloodrequestController extends Controller
         $blood_requests->update($input);
 
         $blood_requests->status = $request->input('status');
-        
+
         $blood_requests->save();
-    
+
         return redirect('blood_requests')->with('message','Request Updated Successfully');
     }
 
@@ -139,10 +144,10 @@ class BloodrequestController extends Controller
     {
         $delrequest = Bloodrequests::find($id);
         $delrequest->delete();
-        
+
         return redirect('blood_requests')->with('message',$delrequest->amount_needed.' Litres of blood group '. $delrequest->blood_type. ' has been deleted');
 
-        
+
     }
 
     public function acceptAll(Request $request)
@@ -156,7 +161,7 @@ class BloodrequestController extends Controller
     else{
         return redirect()->back()->with('message','No request to Accept');
     }
-    
+
    }
 
    public function deleteAll()

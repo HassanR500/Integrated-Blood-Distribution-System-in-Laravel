@@ -2,7 +2,6 @@
 @section('title','Requests')
 @section('content')
 
-
 <div class="row">
     <div class="col-md-12">
         
@@ -10,25 +9,7 @@
         <div class="card card-secondary">
             <div class="card-header info">
                 <h3 class="card-title font-weight-bold">Manage Blood Requests </h3>
-                @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Blood Bank Manager')
-                <div class="row">
-                
-                    <div class="col-md-3">
-                        <form action="{{route('blood_requests.accept-all')}}" method="post">
-                            @csrf
-                            <button type="submit" btn btn-default>Accept All Requests</button>
-                        </form>             
-                    </div>
-                    <div class="col-md-3">
-                    <form action="{{url('/blood_requests')}}" method="post">
-                        {{ method_field('head')}}   
-                        {{ csrf_field() }}
-                        <button type="submit" class='btn btn-default'>Delete All Requests</button>
-                    </form>
-                    </div>
-                </div>
-                
-                @endif
+               
 
                 <!-- <a href= "{{url('blood_requests/create')}}" class = "btn btn-default float-right text-blue text-bold" title = "Add New Request">
                         Add New Request
@@ -40,17 +21,18 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Hospital Name</th>
-                            <th>Blood Type</th>
-                            <th>Amount (L)</th>
-                            <th>Time Interval</th>
-                            <th>Technician Name</th>
+                            <th>Hospital</th>
+                            <th>Group</th>
+                            <th>Amount(L)</th>
+                            <th>Time</th>
+                            <th>Technician</th>
                             <th>Status</th>
                         <!-- <th>Slug</th>   -->
                         <th>Action</th>                  
                         </tr>
                     </thead>
                     <tbody>
+                   
                     @foreach($blood_requests as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
@@ -59,7 +41,7 @@
                                     <td>{{$item->amount_needed}}</td>
                                     <td>{{$item->time_interval}}</td>
                                     <td>{{$item->technician_name}}</td>
-                                    <td><span class="status-{{ strtolower($item->status) }}">{{$item->status}}</span> </td>
+                                    <td style="@if ($item->status === 'Accepted') background-color: green; color: white; @elseif ($item->status === 'Rejected') background-color: red; color: white;  @elseif ($item->status === 'Pending') background-color: orange; color: white; @endif" ><span class="status-{{ strtolower($item->status) }} ">{{$item->status}}</span> </td>
                                     
                                     <td>
                                         <div class="row " style = "display: flex; justify-content:center; align-items:center;">
@@ -75,11 +57,12 @@
                                             @csrf
                                             <div class="btn btn-primary btn-sm mr-2">
                                             <select name="status" id="status">
-                                            <option disabled selected>Accept/Reject</option>
-                                                <option value="Accepted">Accept Request</option>
-                                                <option value="Rejected">Reject Request</option>
+                                            <option disabled selected>Action</option>
+                                                <option value="Accepted">Accept</option>
+                                                <option value="Rejected">Reject</option>
                                             </select>
                                         </div>
+        
                                         <button type="submit" class = "btn btn-success btn-sm mr-2">Approve</button>
                                         </form>
                                         @endif
@@ -89,9 +72,9 @@
                                             @csrf
                                             <div class="btn btn-primary btn-sm mr-2">
                                             <select name="status" id="status">
-                                            <option disabled selected>Accept/Reject</option>
-                                                <option value="Accepted" >Accept Request</option>
-                                                <option value="Rejected">Reject Request</option>
+                                            <option disabled selected>Action</option>
+                                                <option value="Accepted" >Accept</option>
+                                                <option value="Rejected">Reject</option>
                                             </select>
                                         </div>
                                         <button type="submit" class = "btn btn-success btn-sm mr-2">Approve</button>
