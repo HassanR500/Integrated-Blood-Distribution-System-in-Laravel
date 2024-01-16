@@ -1,13 +1,10 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
-Admin
-username: admin@gmail.com
-Passwor: Admin500
-
-BloodBankManager
-username: bloodbankmanager@gmail.com
-Passwor: 123456
-
+# To access the project, Run the following commands
+composer update
+php artisan migrate
+php artisan serve
+create user and enjoy
 =======
 # Blood-Distribution-Decision-Support-
 >>>>>>> 8cb4eabcbb060c4f428d971f3bf607613842c705
